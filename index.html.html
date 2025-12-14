@@ -1,0 +1,3295 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPO Market - Loja de Itens GPO</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2a3b5f;
+            --secondary: #f5a623;
+            --accent: #e74c3c;
+            --light: #f9f9f9;
+            --dark: #1a1a2e;
+            --gray: #e0e0e0;
+            --success: #27ae60;
+            --admin: #9b59b6;
+            --discord: #5865F2;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            color: #333;
+            line-height: 1.5;
+            font-size: 14px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), #1a2a4f);
+            color: white;
+            padding: 0.8rem 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            width: 95%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 10px;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .logo i {
+            font-size: 1.5rem;
+            color: var(--secondary);
+        }
+
+        .logo h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .search-bar {
+            flex: 1;
+            min-width: 200px;
+            max-width: 500px;
+            margin: 0 10px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 0.6rem 1rem;
+            border: none;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            background-color: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-shrink: 0;
+        }
+
+        .user-menu {
+            position: relative;
+        }
+
+        .user-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .user-btn:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            background-color: white;
+            min-width: 200px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .user-dropdown.show {
+            display: block;
+        }
+
+        .user-info {
+            padding: 1rem;
+            background-color: var(--primary);
+            color: white;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .user-info h4 {
+            margin-bottom: 0.2rem;
+            font-size: 1rem;
+        }
+
+        .user-info p {
+            font-size: 0.8rem;
+            opacity: 0.8;
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            padding: 0.8rem 1rem;
+            text-decoration: none;
+            color: #333;
+            transition: background-color 0.2s;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-item:hover {
+            background-color: #f5f5f5;
+        }
+
+        .dropdown-item.logout {
+            color: var(--accent);
+            border-top: 1px solid var(--gray);
+        }
+
+        .dropdown-item i {
+            width: 16px;
+            text-align: center;
+        }
+
+        .cart-icon, .login-icon {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+
+        .admin-badge {
+            background-color: var(--admin);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            display: none;
+        }
+
+        .login-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .login-content {
+            background-color: white;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .login-content h2 {
+            color: var(--primary);
+            margin-bottom: 1.2rem;
+            font-size: 1.3rem;
+        }
+
+        .login-tabs {
+            display: flex;
+            margin-bottom: 1.2rem;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .login-tab {
+            flex: 1;
+            padding: 0.6rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .login-tab.active {
+            color: var(--primary);
+            border-bottom: 3px solid var(--primary);
+        }
+
+        .login-form, .register-form {
+            display: none;
+        }
+
+        .login-form.active, .register-form.active {
+            display: block;
+        }
+
+        .profile-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .profile-content {
+            background-color: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .profile-content h2 {
+            color: var(--primary);
+            margin-bottom: 1.2rem;
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .profile-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: white;
+            margin: 0 auto 1rem;
+        }
+
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 2.5rem 1rem;
+            margin-bottom: 1.5rem;
+            border-radius: 0 0 12px 12px;
+        }
+
+        .hero h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .hero p {
+            font-size: 1rem;
+            max-width: 600px;
+            margin: 0 auto 1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--secondary);
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #e59400;
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .category-filter {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin: 1.5rem 0;
+        }
+
+        .category-btn {
+            background-color: white;
+            border: 2px solid var(--gray);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .category-btn:hover, .category-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .products-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-image {
+            height: 150px;
+            background-color: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            color: var(--primary);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .stock-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: var(--success);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .low-stock {
+            background-color: #e74c3c;
+        }
+
+        .product-info {
+            padding: 1.2rem;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-category {
+            display: inline-block;
+            background-color: #eef2ff;
+            color: var(--primary);
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            align-self: flex-start;
+        }
+
+        .product-name {
+            font-size: 1rem;
+            margin-bottom: 0.4rem;
+            color: var(--dark);
+            line-height: 1.3;
+            min-height: 2.6em;
+        }
+
+        .product-description {
+            color: #666;
+            margin-bottom: 0.8rem;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            flex: 1;
+        }
+
+        .product-price {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.8rem;
+        }
+
+        .product-price span {
+            font-size: 0.9rem;
+            color: #777;
+            font-weight: normal;
+            text-decoration: line-through;
+            margin-left: 0.3rem;
+        }
+
+        .product-actions {
+            margin-top: auto;
+        }
+
+        .admin-panel {
+            display: none;
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+            margin: 1.5rem 0;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid var(--admin);
+        }
+
+        .admin-header h2 {
+            font-size: 1.3rem;
+        }
+
+        .admin-tabs {
+            display: flex;
+            gap: 0.3rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--gray);
+            flex-wrap: wrap;
+            overflow-x: auto;
+        }
+
+        .admin-tab {
+            padding: 0.6rem 1rem;
+            background: none;
+            border: none;
+            border-bottom: 3px solid transparent;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            color: #666;
+            white-space: nowrap;
+        }
+
+        .admin-tab.active {
+            color: var(--admin);
+            border-bottom: 3px solid var(--admin);
+        }
+
+        .inventory-management, .price-management {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .inventory-item {
+            background-color: #f9f9f9;
+            padding: 1rem;
+            border-radius: 6px;
+            border: 1px solid var(--gray);
+        }
+
+        .cart-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .cart-content {
+            background-color: white;
+            width: 90%;
+            max-width: 700px;
+            border-radius: 8px;
+            padding: 1.5rem;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .cart-header h2 {
+            color: var(--primary);
+            font-size: 1.3rem;
+        }
+
+        .close-cart {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #777;
+        }
+
+        .cart-items {
+            margin-bottom: 1.5rem;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem 0;
+            border-bottom: 1px solid #eee;
+            flex-wrap: wrap;
+        }
+
+        .cart-total {
+            text-align: right;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin: 1rem 0;
+            color: var(--primary);
+        }
+
+        .checkout-form {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.06);
+            margin: 1.5rem 0;
+            display: none;
+        }
+
+        .checkout-form h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid var(--gray);
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        .review-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .review-content {
+            background-color: white;
+            width: 90%;
+            max-width: 450px;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stars {
+            font-size: 1.5rem;
+            color: #ddd;
+            margin: 1rem 0;
+            cursor: pointer;
+        }
+
+        /* Modal de Suporte */
+        .support-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .support-content {
+            background-color: white;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 8px;
+            padding: 1.5rem;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .support-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 1px solid var(--gray);
+        }
+
+        .support-header h2 {
+            color: var(--primary);
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .close-support {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #777;
+        }
+
+        .support-step {
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background-color: #f9f9f9;
+            border-radius: 6px;
+            border-left: 4px solid var(--primary);
+        }
+
+        .refund-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+            margin: 1.2rem 0;
+        }
+
+        .refund-option {
+            padding: 1rem;
+            background-color: white;
+            border: 2px solid var(--gray);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .refund-option:hover {
+            background-color: #f0f7ff;
+            border-color: var(--primary);
+        }
+
+        .refund-option.selected {
+            background-color: #eef7ff;
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .refund-option i {
+            font-size: 1.2rem;
+        }
+
+        .whatsapp-contact {
+            background-color: #25D366;
+            color: white;
+            padding: 1rem;
+            border-radius: 6px;
+            text-align: center;
+            margin-top: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.8rem;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .whatsapp-contact:hover {
+            background-color: #128C7E;
+        }
+
+        .whatsapp-contact i {
+            font-size: 1.5rem;
+        }
+
+        .info-box {
+            background-color: #eef7ff;
+            border: 1px solid #b3d7ff;
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+
+        .info-box.warning {
+            background-color: #fff3cd;
+            border-color: #ffc107;
+        }
+
+        .step-number {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 24px;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        /* Modal de Confirmação de Pedido */
+        .order-confirmation-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .order-confirmation-content {
+            background-color: white;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .order-details {
+            background-color: #f8f9fa;
+            border-radius: 6px;
+            padding: 1rem;
+            margin: 1rem 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .order-items-list {
+            max-height: 150px;
+            overflow-y: auto;
+            margin: 0.5rem 0;
+            padding: 0.5rem;
+            background-color: white;
+            border-radius: 4px;
+            border: 1px solid #eee;
+        }
+
+        .order-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.3rem 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .discord-btn {
+            background-color: var(--discord) !important;
+            transition: all 0.3s ease;
+        }
+
+        .discord-btn:hover {
+            background-color: #4752c4 !important;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(88, 101, 242, 0.3);
+        }
+
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 2rem 0 1rem;
+            margin-top: 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            color: var(--secondary);
+        }
+
+        .footer-section p, .footer-section a {
+            color: #bbb;
+            margin-bottom: 0.6rem;
+            display: block;
+            text-decoration: none;
+            font-size: 0.85rem;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 0.8rem;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #aaa;
+            font-size: 0.8rem;
+        }
+
+        /* Estilos para o modal de novo item */
+        #new-item-form .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        #new-item-form label {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--dark);
+            margin-bottom: 0.4rem;
+            display: block;
+        }
+
+        #new-item-form input, 
+        #new-item-form select, 
+        #new-item-form textarea {
+            width: 100%;
+            padding: 0.6rem;
+            border: 1px solid var(--gray);
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        #new-item-form .form-row {
+            display: flex;
+            gap: 0.8rem;
+        }
+
+        #new-item-form .form-row .form-group {
+            flex: 1;
+        }
+
+        .admin-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+        .btn-success {
+            background-color: var(--success) !important;
+        }
+
+        .btn-success:hover {
+            background-color: #219653 !important;
+        }
+
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            
+            .search-bar {
+                order: 3;
+                width: 100%;
+                max-width: 100%;
+                margin: 0;
+            }
+            
+            .hero h2 {
+                font-size: 1.5rem;
+            }
+            
+            .products-container {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .inventory-management, .price-management {
+                grid-template-columns: 1fr;
+            }
+            
+            .refund-options {
+                flex-direction: column;
+            }
+            
+            .admin-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .admin-actions button {
+                margin-bottom: 0.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .products-container {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            }
+            
+            .product-image {
+                height: 110px;
+                font-size: 1.8rem;
+            }
+            
+            .user-btn span {
+                display: none;
+            }
+        }
+        
+        .truncate {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        
+        .small-text {
+            font-size: 0.8rem;
+        }
+        
+        .compact {
+            margin: 0.2rem 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-dragon"></i>
+                    <h1>GPO Market</h1>
+                </div>
+                
+                <div class="search-bar">
+                    <input type="text" id="search-input" placeholder="Pesquisar produtos...">
+                </div>
+                
+                <div class="header-actions">
+                    <div class="admin-badge" id="admin-badge">Admin</div>
+                    
+                    <div class="user-menu" id="user-menu" style="display: none;">
+                        <button class="user-btn" id="user-btn">
+                            <div class="user-avatar" id="user-avatar">U</div>
+                            <span id="user-name">Usuário</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="user-dropdown" id="user-dropdown">
+                            <div class="user-info">
+                                <h4 id="dropdown-user-name">Usuário</h4>
+                                <p id="dropdown-user-email">email@exemplo.com</p>
+                            </div>
+                            <button class="dropdown-item" id="profile-btn">
+                                <i class="fas fa-user"></i>
+                                Meu Perfil
+                            </button>
+                            <button class="dropdown-item" id="orders-btn">
+                                <i class="fas fa-shopping-bag"></i>
+                                Meus Pedidos
+                            </button>
+                            <button class="dropdown-item logout" id="logout-btn">
+                                <i class="fas fa-sign-out-alt"></i>
+                                Sair
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="login-icon" id="login-icon">
+                        <i class="fas fa-user fa-lg"></i>
+                    </div>
+                    
+                    <div class="cart-icon" id="cart-icon">
+                        <i class="fas fa-shopping-cart fa-lg"></i>
+                        <span class="cart-count" id="cart-count">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="login-modal" id="login-modal">
+        <div class="login-content">
+            <h2>Login</h2>
+            
+            <div class="login-tabs">
+                <button class="login-tab active" id="login-tab-btn">Login</button>
+                <button class="login-tab" id="register-tab-btn">Criar Conta</button>
+            </div>
+            
+            <form class="login-form active" id="login-form">
+                <div class="form-group">
+                    <label for="login-email">E-mail</label>
+                    <input type="email" id="login-email" placeholder="Seu e-mail" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Senha</label>
+                    <input type="password" id="login-password" placeholder="Sua senha" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn" id="login-submit-btn">Entrar</button>
+                    <button type="button" class="btn" id="close-login" style="background-color: #777; margin-left: 8px;">Cancelar</button>
+                </div>
+            </form>
+            
+            <form class="register-form" id="register-form">
+                <div class="form-group">
+                    <label for="register-name">Nome Completo</label>
+                    <input type="text" id="register-name" placeholder="Seu nome completo" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-phone">Telefone</label>
+                    <input type="tel" id="register-phone" placeholder="(11) 99999-9999" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">E-mail</label>
+                    <input type="email" id="register-email" placeholder="Seu e-mail" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Senha</label>
+                    <input type="password" id="register-password" placeholder="Crie uma senha" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-confirm-password">Confirmar Senha</label>
+                    <input type="password" id="register-confirm-password" placeholder="Confirme sua senha" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn" id="register-submit-btn">Criar Conta</button>
+                    <button type="button" class="btn" id="cancel-register" style="background-color: #777; margin-left: 8px;">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="profile-modal" id="profile-modal">
+        <div class="profile-content">
+            <h2><i class="fas fa-user"></i> Meu Perfil</h2>
+            
+            <div class="profile-avatar" id="profile-avatar">U</div>
+            
+            <form id="profile-form">
+                <div class="form-group">
+                    <label for="profile-name">Nome Completo</label>
+                    <input type="text" id="profile-name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="profile-phone">Telefone</label>
+                    <input type="tel" id="profile-phone" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="profile-email">E-mail</label>
+                    <input type="email" id="profile-email" required readonly>
+                    <small style="color: #777;">O e-mail não pode ser alterado</small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="profile-current-password">Senha Atual (para alterar senha)</label>
+                    <input type="password" id="profile-current-password" placeholder="Digite sua senha atual">
+                </div>
+                
+                <div class="form-group">
+                    <label for="profile-new-password">Nova Senha</label>
+                    <input type="password" id="profile-new-password" placeholder="Nova senha (opcional)">
+                </div>
+                
+                <div class="form-group">
+                    <label for="profile-confirm-password">Confirmar Nova Senha</label>
+                    <input type="password" id="profile-confirm-password" placeholder="Confirme a nova senha">
+                </div>
+                
+                <div class="form-group">
+                    <button type="submit" class="btn" id="save-profile-btn">Salvar Alterações</button>
+                    <button type="button" class="btn" id="close-profile" style="background-color: #777; margin-left: 8px;">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal para Adicionar Novo Item -->
+    <div class="support-modal" id="new-item-modal">
+        <div class="support-content">
+            <div class="support-header">
+                <h2><i class="fas fa-plus-circle"></i> Adicionar Novo Item</h2>
+                <button class="close-support" id="close-new-item">&times;</button>
+            </div>
+            
+            <form id="new-item-form">
+                <div class="form-group">
+                    <label for="new-item-name">Nome do Item *</label>
+                    <input type="text" id="new-item-name" placeholder="Ex: Mera Mera no Mi" required>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="new-item-category">Categoria *</label>
+                        <select id="new-item-category" required>
+                            <option value="">Selecione</option>
+                            <option value="fruit">Fruta</option>
+                            <option value="weapon">Arma</option>
+                            <option value="ranged">Longo Alcance</option>
+                            <option value="item">Item</option>
+                            <option value="accessory">Acessório</option>
+                            <option value="outfit">Outfit</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-item-id">ID do Item *</label>
+                        <input type="number" id="new-item-id" placeholder="Ex: 999" required min="1">
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-item-description">Descrição</label>
+                    <textarea id="new-item-description" rows="2" placeholder="Descreva o item..."></textarea>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="new-item-price">Preço ($) *</label>
+                        <input type="number" id="new-item-price" step="0.01" min="0" value="0.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="new-item-stock">Estoque Inicial *</label>
+                        <input type="number" id="new-item-stock" min="0" value="0" required>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="new-item-icon">Ícone (Font Awesome)</label>
+                    <input type="text" id="new-item-icon" placeholder="Ex: fa-fire" value="fa-box">
+                    <small class="small-text">Use classes do Font Awesome como "fa-sword", "fa-gem", etc.</small>
+                </div>
+                
+                <div class="info-box">
+                    <h4><i class="fas fa-info-circle"></i> Informações importantes:</h4>
+                    <p>1. O ID deve ser único e não pode repetir com itens existentes</p>
+                    <p>2. Após adicionar, o item aparecerá imediatamente no catálogo</p>
+                    <p>3. Você pode editar preço e estoque depois no Painel Admin</p>
+                </div>
+                
+                <div class="form-group" style="margin-top: 1.5rem;">
+                    <button type="submit" class="btn btn-success" id="save-new-item-btn">
+                        <i class="fas fa-save"></i> Salvar Item
+                    </button>
+                    <button type="button" class="btn" id="cancel-new-item" style="background-color: #777; margin-left: 8px;">
+                        Cancelar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação de Pedido -->
+    <div class="order-confirmation-modal" id="order-confirmation-modal">
+        <div class="order-confirmation-content">
+            <div class="support-header">
+                <h2><i class="fas fa-check-circle" style="color: #27ae60;"></i> Pedido Realizado!</h2>
+                <button class="close-support" id="close-order-confirmation">&times;</button>
+            </div>
+            
+            <div style="text-align: center; margin: 1.5rem 0;">
+                <i class="fas fa-ticket-alt" style="font-size: 3rem; color: var(--discord);"></i>
+                <h3 id="confirmation-order-id" style="margin-top: 1rem; color: var(--primary);">Pedido #GPO-0000</h3>
+                <p class="small-text" style="color: #666;">Guarde este número para referência</p>
+            </div>
+            
+            <div class="order-details">
+                <h4><i class="fas fa-box-open"></i> Resumo do Pedido:</h4>
+                <div class="order-items-list" id="confirmation-items-list">
+                    <!-- Itens serão preenchidos por JavaScript -->
+                </div>
+                <div style="text-align: right; margin-top: 1rem; padding-top: 0.5rem; border-top: 1px solid #eee;">
+                    <h4>Total: <span id="confirmation-total" style="color: var(--accent);">$0.00</span></h4>
+                </div>
+            </div>
+            
+            <div class="info-box" style="background-color: #eef7ff; border-color: var(--discord);">
+                <h4><i class="fas fa-info-circle"></i> Próximos Passos:</h4>
+                <p><strong>1. Entre no nosso servidor Discord</strong></p>
+                <p class="small-text">Clique no botão abaixo para acessar o servidor</p>
+                
+                <p><strong>2. Nosso bot criará um ticket</strong></p>
+                <p class="small-text">Informe o número do pedido: <strong id="order-id-copy">GPO-0000</strong></p>
+                
+                <p><strong>3. Receba instruções de pagamento</strong></p>
+                <p class="small-text">Siga as instruções no ticket para finalizar o pagamento</p>
+            </div>
+            
+            <div style="margin-top: 1.5rem;">
+                <button type="button" class="btn discord-btn" id="go-to-discord-btn" style="width: 100%; font-size: 1.1rem; padding: 1rem;">
+                    <i class="fab fa-discord"></i> Entrar no Discord para Finalizar
+                </button>
+                <button type="button" class="btn" id="close-confirmation-btn" style="width: 100%; margin-top: 0.8rem; background-color: #777;">
+                    Fechar
+                </button>
+            </div>
+            
+            <p class="small-text" style="margin-top: 1rem; color: #666;">
+                <i class="fas fa-exclamation-circle"></i> Após o pagamento, nossa equipe entregará os itens no jogo através do ticket.
+            </p>
+        </div>
+    </div>
+
+    <!-- Modal de Como Comprar -->
+    <div class="support-modal" id="how-to-buy-modal">
+        <div class="support-content">
+            <div class="support-header">
+                <h2><i class="fas fa-shopping-cart"></i> Como Comprar no GPO Market</h2>
+                <button class="close-support" id="close-how-to-buy">&times;</button>
+            </div>
+            
+            <div class="support-step">
+                <h3><span class="step-number">1</span> Selecione seus produtos</h3>
+                <p>Navegue pelas categorias de frutas, armas, outfits e itens. Clique em "Adicionar" para colocar os itens desejados no carrinho.</p>
+            </div>
+            
+            <div class="support-step">
+                <h3><span class="step-number">2</span> Revise seu carrinho</h3>
+                <p>Clique no ícone do carrinho no canto superior direito para ver todos os itens selecionados. Você pode ajustar quantidades ou remover produtos.</p>
+            </div>
+            
+            <div class="support-step">
+                <h3><span class="step-number">3</span> Finalize a compra</h3>
+                <p>Clique em "Finalizar Compra" e preencha todos os dados necessários:
+                <ul>
+                    <li>Nome completo e e-mail</li>
+                    <li>Usuário do Discord (para contato)</li>
+                    <li>Conta no jogo (nome do personagem)</li>
+                    <li>Método de pagamento</li>
+                </ul>
+                </p>
+            </div>
+            
+            <div class="support-step">
+                <h3><span class="step-number">4</span> Entre no nosso Discord</h3>
+                <p>Após finalizar a compra, você será redirecionado para nosso servidor Discord. Nosso bot criará automaticamente um ticket onde você receberá instruções de pagamento e entrega dos itens.</p>
+                <p><strong>Servidor Discord:</strong> <a href="https://discord.gg/zNfACXya" target="_blank" style="color: var(--discord); text-decoration: underline;">discord.gg/zNfACXya</a></p>
+            </div>
+            
+            <div class="info-box">
+                <h4><i class="fas fa-info-circle"></i> Informações importantes:</h4>
+                <p><strong>Estoque real:</strong> Todos os itens listados estão disponíveis fisicamente em nossas contas no jogo.</p>
+                <p><strong>Entrega:</strong> A entrega é feita através de trade direto no Grand Piece Online.</p>
+                <p><strong>Segurança:</strong> Usamos middlemans verificados para garantir a segurança da transação.</p>
+            </div>
+            
+            <div class="form-group">
+                <button type="button" class="btn" id="close-how-to-buy-btn" style="width: 100%;">Entendi, obrigado!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Reembolso -->
+    <div class="support-modal" id="refund-modal">
+        <div class="support-content">
+            <div class="support-header">
+                <h2><i class="fas fa-undo-alt"></i> Solicitar Reembolso</h2>
+                <button class="close-support" id="close-refund">&times;</button>
+            </div>
+            
+            <div class="support-step">
+                <h3><span class="step-number">1</span> Identificação do problema</h3>
+                <p>Vimos que você se arrependeu da compra e gostaria de realizar o reembolso. Para isso precisamos que selecione uma das opções abaixo para sabermos o motivo do seu reembolso:</p>
+            </div>
+            
+            <div class="refund-options" id="refund-options">
+                <div class="refund-option" data-reason="arrependimento">
+                    <i class="fas fa-frown"></i>
+                    <div>
+                        <h4>Me arrependi da compra</h4>
+                        <p class="small-text">Decidi que não quero mais o produto comprado</p>
+                    </div>
+                </div>
+                
+                <div class="refund-option" data-reason="produto-errado">
+                    <i class="fas fa-exchange-alt"></i>
+                    <div>
+                        <h4>Comprei o produto errado</h4>
+                        <p class="small-text">Selecionei o item incorreto por engano</p>
+                    </div>
+                </div>
+                
+                <div class="refund-option" data-reason="nao-recebido">
+                    <i class="fas fa-box-open"></i>
+                    <div>
+                        <h4>Não recebi o produto</h4>
+                        <p class="small-text">Fiz o pagamento mas não recebi o item no jogo</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="refund-instructions" style="display: none;">
+                <div class="support-step">
+                    <h3><span class="step-number">2</span> Instruções para reembolso</h3>
+                    <p id="refund-details">Selecione uma opção acima para ver as instruções específicas.</p>
+                </div>
+                
+                <div class="info-box warning">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Atenção:</h4>
+                    <p><strong>Prazo para reembolso:</strong> Até 7 dias após a compra.</p>
+                    <p><strong>Condições:</strong> O item não pode ter sido utilizado no jogo.</p>
+                    <p><strong>Processo:</strong> O reembolso pode levar até 5 dias úteis para ser processado.</p>
+                </div>
+                
+                <div class="whatsapp-contact" id="whatsapp-link" style="display: none;">
+                    <i class="fab fa-whatsapp"></i>
+                    <div>
+                        <h4>Contatar Suporte via WhatsApp</h4>
+                        <p>Clique aqui para falar diretamente com nosso suporte</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <button type="button" class="btn" id="close-refund-btn" style="width: 100%; background-color: #777;">Voltar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Contato -->
+    <div class="support-modal" id="contact-modal">
+        <div class="support-content">
+            <div class="support-header">
+                <h2><i class="fas fa-headset"></i> Contato</h2>
+                <button class="close-support" id="close-contact">&times;</button>
+            </div>
+            
+            <div class="support-step">
+                <h3><i class="fas fa-comments"></i> Canais de Atendimento</h3>
+                <p>Entre em contato conosco através dos seguintes canais:</p>
+            </div>
+            
+            <div class="whatsapp-contact" onclick="window.open('https://wa.me/5511971827725', '_blank')">
+                <i class="fab fa-whatsapp"></i>
+                <div>
+                    <h4>WhatsApp</h4>
+                    <p>(11) 97182-7725</p>
+                    <p class="small-text">Atendimento: 24h para emergências</p>
+                </div>
+            </div>
+            
+            <div class="support-step" style="margin-top: 1.5rem;">
+                <h4><i class="fab fa-discord"></i> Discord</h4>
+                <p>Entre em nosso servidor do Discord para suporte e finalização de compras:</p>
+                <p><strong>Servidor:</strong> <a href="https://discord.gg/zNfACXya" target="_blank" style="color: var(--discord); text-decoration: underline;">discord.gg/zNfACXya</a></p>
+                <p><strong>Sistema de Tickets:</strong> Nosso bot cria automaticamente tickets para cada compra</p>
+            </div>
+            
+            <div class="support-step">
+                <h4><i class="fas fa-envelope"></i> E-mail</h4>
+                <p>Para assuntos administrativos ou parcerias:</p>
+                <p><strong>suporte@gpomarket.com</strong></p>
+                <p class="small-text">Resposta em até 48 horas úteis</p>
+            </div>
+            
+            <div class="info-box">
+                <h4><i class="fas fa-clock"></i> Horários de Atendimento</h4>
+                <p><strong>WhatsApp:</strong> 24 horas (para casos urgentes)</p>
+                <p><strong>Discord:</strong> 10h às 22h (horário de Brasília)</p>
+                <p><strong>E-mail:</strong> Resposta em até 48 horas úteis</p>
+            </div>
+            
+            <div class="form-group">
+                <button type="button" class="btn" id="close-contact-btn" style="width: 100%;">Fechar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de FAQ -->
+    <div class="support-modal" id="faq-modal">
+        <div class="support-content">
+            <div class="support-header">
+                <h2><i class="fas fa-question-circle"></i> FAQ - Perguntas Frequentes</h2>
+                <button class="close-support" id="close-faq">&times;</button>
+            </div>
+            
+            <div class="support-step">
+                <h3><i class="fas fa-shipping-fast"></i> Entrega e Prazo</h3>
+                
+                <h4>Quanto tempo leva para receber meu pedido?</h4>
+                <p>Após a confirmação do pagamento, a entrega é feita em até 24 horas. Para pagamentos via PIX, a entrega pode ser imediata após confirmação.</p>
+                
+                <h4>Como é feita a entrega dos itens?</h4>
+                <p>A entrega é feita através de trade direto no jogo. Nossa equipe entrará em contato pelo Discord para combinar o encontro no jogo.</p>
+            </div>
+            
+            <div class="support-step">
+                <h3><i class="fas fa-lock"></i> Segurança e Pagamento</h3>
+                
+                <h4>Como garantir a segurança da minha compra?</h4>
+                <p>Utilizamos middlemans verificados do servidor oficial do GPO. Todas as transações são acompanhadas por um staff membro para garantir a segurança de ambas as partes.</p>
+                
+                <h4>Quais métodos de pagamento são aceitos?</h4>
+                <p>Aceitamos PIX, cartão de crédito, criptomoedas e PayPal. Para pagamentos internacionais, recomendamos PayPal ou criptomoedas.</p>
+            </div>
+            
+            <div class="support-step">
+                <h3><i class="fas fa-exchange-alt"></i> Trocas e Reembolsos</h3>
+                
+                <h4>Posso trocar um item que comprei?</h4>
+                <p>Sim, é possível trocar por outro item de valor equivalente dentro de 7 dias após a compra, desde que o item não tenha sido utilizado.</p>
+                
+                <h4>Como funciona o processo de reembolso?</h4>
+                <p>O reembolso pode ser solicitado em até 7 dias após a compra. O valor será devolvido pelo mesmo método de pagamento utilizado, em até 5 dias úteis.</p>
+            </div>
+            
+            <div class="support-step">
+                <h3><i class="fas fa-user-shield"></i> Contas e Segurança</h3>
+                
+                <h4>É seguro informar minha conta do jogo?</h4>
+                <p>Sim, apenas precisamos do nome do seu personagem para encontrá-lo no jogo. Nunca solicitamos senhas ou informações sensíveis da sua conta.</p>
+                
+                <h4>Posso comprar para presentear um amigo?</h4>
+                <p>Sim, basta informar o nome do personagem do seu amigo no campo "Conta no Jogo" durante o checkout.</p>
+            </div>
+            
+            <div class="form-group">
+                <button type="button" class="btn" id="close-faq-btn" style="width: 100%;">Fechar FAQ</button>
+            </div>
+        </div>
+    </div>
+
+    <section class="hero">
+        <div class="container">
+            <h2>Compre os melhores itens do GPO</h2>
+            <p>Frutas, armas, outfits e itens para melhorar sua experiência no Grand Piece Online. Estoque real no jogo!</p>
+            <a href="#" class="btn" id="explore-btn">Explorar Itens</a>
+        </div>
+    </section>
+
+    <main class="container">
+        <div class="category-filter">
+            <button class="category-btn active" data-category="all">Todos</button>
+            <button class="category-btn" data-category="fruit">Frutas</button>
+            <button class="category-btn" data-category="weapon">Armas</button>
+            <button class="category-btn" data-category="ranged">Longo Alcance</button>
+            <button class="category-btn" data-category="item">Itens</button>
+            <button class="category-btn" data-category="accessory">Acessórios</button>
+            <button class="category-btn" data-category="outfit">Outfits</button>
+        </div>
+
+        <div class="admin-panel" id="admin-panel">
+            <div class="admin-header">
+                <h2>Painel Admin</h2>
+                <div class="admin-actions">
+                    <button class="btn btn-success" id="add-new-item-btn">
+                        <i class="fas fa-plus"></i> Novo Item
+                    </button>
+                    <button class="btn" id="logout-admin">Sair</button>
+                </div>
+            </div>
+            
+            <div class="admin-tabs">
+                <button class="admin-tab active" data-tab="inventory">Estoque</button>
+                <button class="admin-tab" data-tab="orders">Pedidos</button>
+                <button class="admin-tab" data-tab="prices">Preços</button>
+            </div>
+            
+            <div class="admin-content">
+                <div id="inventory-tab" class="admin-tab-content">
+                    <h3>Estoque no Jogo</h3>
+                    <div class="inventory-management" id="inventory-management">
+                    </div>
+                </div>
+                
+                <div id="orders-tab" class="admin-tab-content" style="display: none;">
+                    <h3>Pedidos Recentes</h3>
+                    <div id="orders-list">
+                        <p class="small-text">Nenhum pedido recente.</p>
+                    </div>
+                </div>
+                
+                <div id="prices-tab" class="admin-tab-content" style="display: none;">
+                    <h3>Gerenciar Preços</h3>
+                    <div class="price-management" id="price-management">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="products-container" id="products-container">
+        </div>
+
+        <div class="checkout-form" id="checkout-form">
+            <h2>Finalizar Compra</h2>
+            <form id="payment-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Nome Completo</label>
+                        <input type="text" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">E-mail</label>
+                        <input type="email" id="email" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="discord">Usuário Discord</label>
+                    <input type="text" id="discord" placeholder="usuario#1234 ou usuario" required>
+                </div>
+                <div class="form-group">
+                    <label for="game-account">Conta no Jogo</label>
+                    <input type="text" id="game-account" placeholder="Nome do personagem" required>
+                </div>
+                <div class="form-group">
+                    <label for="payment-method">Método de Pagamento</label>
+                    <select id="payment-method" required>
+                        <option value="">Selecione</option>
+                        <option value="paypal">PayPal</option>
+                        <option value="credit-card">Cartão</option>
+                        <option value="crypto">Criptomoeda</option>
+                        <option value="pix">PIX</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="notes">Observações (opcional)</label>
+                    <textarea id="notes" rows="2" placeholder="Informações adicionais..."></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn" id="submit-order">Confirmar Pedido</button>
+                    <button type="button" class="btn" id="cancel-checkout" style="background-color: #777; margin-left: 8px;">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <div class="cart-modal" id="cart-modal">
+        <div class="cart-content">
+            <div class="cart-header">
+                <h2>Seu Carrinho</h2>
+                <button class="close-cart" id="close-cart">&times;</button>
+            </div>
+            <div class="cart-items" id="cart-items">
+            </div>
+            <div class="cart-total">
+                Total: $<span id="cart-total">0.00</span>
+            </div>
+            <div style="text-align: right;">
+                <button class="btn" id="checkout-btn">Finalizar Compra</button>
+                <button class="btn" id="clear-cart" style="background-color: #777; margin-left: 8px;">Limpar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="review-modal" id="review-modal">
+        <div class="review-content">
+            <h2>Avalie sua Compra</h2>
+            <p>Como foi sua experiência?</p>
+            <div class="stars" id="rating-stars">
+                <i class="far fa-star" data-rating="1"></i>
+                <i class="far fa-star" data-rating="2"></i>
+                <i class="far fa-star" data-rating="3"></i>
+                <i class="far fa-star" data-rating="4"></i>
+                <i class="far fa-star" data-rating="5"></i>
+            </div>
+            <div class="form-group">
+                <label for="review-comment">Comentário (opcional)</label>
+                <textarea id="review-comment" rows="2" placeholder="Deixe um comentário..."></textarea>
+            </div>
+            <div class="form-group">
+                <button class="btn" id="submit-review">Enviar</button>
+                <button class="btn" id="skip-review" style="background-color: #777; margin-left: 8px;">Pular</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>GPO Market</h3>
+                    <p class="small-text">A melhor loja de itens do Grand Piece Online. Vendas seguras e rápidas.</p>
+                    <div class="social-icons">
+                        <a href="https://discord.gg/zNfACXya" target="_blank"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>Categorias</h3>
+                    <a href="#" data-category="fruit" class="small-text">Frutas</a>
+                    <a href="#" data-category="weapon" class="small-text">Armas</a>
+                    <a href="#" data-category="ranged" class="small-text">Longo Alcance</a>
+                    <a href="#" data-category="item" class="small-text">Itens</a>
+                    <a href="#" data-category="accessory" class="small-text">Acessórios</a>
+                    <a href="#" data-category="outfit" class="small-text">Outfits</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Suporte</h3>
+                    <a href="#" class="small-text support-link" data-support="how-to-buy">Como Comprar</a>
+                    <a href="#" class="small-text support-link" data-support="refund">Reembolso</a>
+                    <a href="#" class="small-text support-link" data-support="contact">Contato</a>
+                    <a href="#" class="small-text support-link" data-support="faq">FAQ</a>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 GPO Market. Não afiliado ao Grand Piece Online.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const products = [
+            { id: 101, name: "Kilo Kilo no Mi", category: "fruit", description: "Altera peso do usuário.", price: 0.00, icon: "fa-weight", stock: 0 },
+            { id: 102, name: "Suke Suke no Mi", category: "fruit", description: "Concede invisibilidade.", price: 0.00, icon: "fa-eye-slash", stock: 0 },
+            { id: 103, name: "Guru Guru no Mi", category: "fruit", description: "Gira partes do corpo.", price: 0.00, icon: "fa-sync", stock: 0 },
+            { id: 104, name: "Chiyu Chiyu no Mi", category: "fruit", description: "Poderes de cura.", price: 0.00, icon: "fa-heart", stock: 0 },
+            { id: 105, name: "Bari Bari no Mi", category: "fruit", description: "Cria barreiras.", price: 0.00, icon: "fa-shield-alt", stock: 0 },
+            { id: 106, name: "Mero Mero no Mi", category: "fruit", description: "Petrifica pessoas.", price: 0.00, icon: "fa-gem", stock: 0 },
+            { id: 107, name: "Horo Horo no Mi", category: "fruit", description: "Cria fantasmas.", price: 0.00, icon: "fa-ghost", stock: 0 },
+            { id: 108, name: "Gomu Gomu no Mi", category: "fruit", description: "Corpo elástico.", price: 0.00, icon: "fa-expand-alt", stock: 0 },
+            { id: 109, name: "Bomu Bomu no Mi", category: "fruit", description: "Explode partes do corpo.", price: 0.00, icon: "fa-bomb", stock: 0 },
+            { id: 110, name: "Yomi Yomi no Mi", category: "fruit", description: "Retorna à vida.", price: 0.00, icon: "fa-skull-crossbones", stock: 0 },
+            { id: 111, name: "Bane Bane no Mi", category: "fruit", description: "Estica como molas.", price: 0.00, icon: "fa-wind", stock: 0 },
+            { id: 112, name: "Kira Kira no Mi", category: "fruit", description: "Transforma em diamante.", price: 0.00, icon: "fa-gem", stock: 0 },
+            { id: 113, name: "Zushi Zushi no Mi", category: "fruit", description: "Manipula gravidade.", price: 0.00, icon: "fa-meteor", stock: 0 },
+            { id: 114, name: "Gura Gura no Mi", category: "fruit", description: "Cria terremotos.", price: 0.00, icon: "fa-mountain", stock: 0 },
+            { id: 115, name: "Suna Suna no Mi", category: "fruit", description: "Transforma em areia.", price: 0.00, icon: "fa-sun", stock: 0 },
+            { id: 116, name: "Hie Hie no Mi", category: "fruit", description: "Transforma em gelo.", price: 0.00, icon: "fa-snowflake", stock: 0 },
+            { id: 117, name: "Ito Ito no Mi", category: "fruit", description: "Cria e manipula fios.", price: 0.00, icon: "fa-spider", stock: 0 },
+            { id: 118, name: "Goro Goro no Mi", category: "fruit", description: "Transforma em raio.", price: 0.00, icon: "fa-bolt", stock: 0 },
+            { id: 119, name: "Nikyu Nikyu no Mi", category: "fruit", description: "Cria almofadas nas mãos.", price: 0.00, icon: "fa-hand-paper", stock: 0 },
+            { id: 120, name: "Mera Mera no Mi", category: "fruit", description: "Transforma em fogo.", price: 0.00, icon: "fa-fire", stock: 0 },
+            { id: 121, name: "Kage Kage no Mi", category: "fruit", description: "Manipula sombras.", price: 0.00, icon: "fa-moon", stock: 0 },
+            { id: 122, name: "Magu Magu no Mi", category: "fruit", description: "Transforma em magma.", price: 0.00, icon: "fa-volcano", stock: 0 },
+            { id: 123, name: "Pika Pika no Mi", category: "fruit", description: "Transforma em luz.", price: 0.00, icon: "fa-sun", stock: 0 },
+            { id: 124, name: "Yami Yami no Mi", category: "fruit", description: "Controla escuridão.", price: 0.00, icon: "fa-moon", stock: 0 },
+            { id: 125, name: "Yuki Yuki no Mi", category: "fruit", description: "Transforma em neve.", price: 0.00, icon: "fa-snowflake", stock: 0 },
+            { id: 126, name: "Goru Goru no Mi", category: "fruit", description: "Corpo de ferro.", price: 0.00, icon: "fa-shield-alt", stock: 0 },
+            { id: 127, name: "Moku Moku no Mi", category: "fruit", description: "Transforma em fumaça.", price: 0.00, icon: "fa-smog", stock: 0 },
+            { id: 128, name: "Tori Tori no Mi, Phoenix", category: "fruit", description: "Transforma em fênix.", price: 0.00, icon: "fa-dove", stock: 0 },
+            { id: 129, name: "Mochi Mochi no Mi", category: "fruit", description: "Transforma em mochi.", price: 0.00, icon: "fa-cookie-bite", stock: 0 },
+            { id: 130, name: "Ope Ope no Mi", category: "fruit", description: "Cria sala de operações.", price: 0.00, icon: "fa-clinic-medical", stock: 0 },
+            { id: 131, name: "Doku Doku no Mi", category: "fruit", description: "Cria e controla veneno.", price: 0.00, icon: "fa-skull", stock: 0 },
+            { id: 132, name: "Hito Hito no Mi, Daibutsu", category: "fruit", description: "Transforma em Buda.", price: 0.00, icon: "fa-monument", stock: 0 },
+            { id: 133, name: "Ryu Ryu no Mi, Pteranodon", category: "fruit", description: "Transforma em pteranodonte.", price: 0.00, icon: "fa-dragon", stock: 0 },
+            { id: 201, name: "Bisento", category: "weapon", description: "Arma de haste pesada.", price: 0.00, icon: "fa-hatchet", stock: 0 },
+            { id: 202, name: "Blood Scythe", category: "weapon", description: "Foice ensanguentada.", price: 0.00, icon: "fa-scythe", stock: 0 },
+            { id: 203, name: "Crab Cutlass", category: "weapon", description: "Cutelo de caranguejo.", price: 0.00, icon: "fa-utensils", stock: 0 },
+            { id: 204, name: "Demon Jester's Scythe", category: "weapon", description: "Foice demoníaca.", price: 0.00, icon: "fa-theater-masks", stock: 0 },
+            { id: 205, name: "Elo's Sledgehammer", category: "weapon", description: "Martelo pesado.", price: 0.00, icon: "fa-hammer", stock: 0 },
+            { id: 206, name: "Festival Lancer", category: "weapon", description: "Lança decorativa.", price: 0.00, icon: "fa-bullseye", stock: 0 },
+            { id: 207, name: "Flower Sword", category: "weapon", description: "Espada floral.", price: 0.00, icon: "fa-spa", stock: 0 },
+            { id: 208, name: "Golden Staff", category: "weapon", description: "Cajado dourado.", price: 0.00, icon: "fa-staff-aesculapius", stock: 0 },
+            { id: 209, name: "Gravity Blade", category: "weapon", description: "Manipula gravidade.", price: 0.00, icon: "fa-weight-hanging", stock: 0 },
+            { id: 210, name: "Hollow's Fang", category: "weapon", description: "Espada de Hollow.", price: 0.00, icon: "fa-tooth", stock: 0 },
+            { id: 211, name: "Kraken Blade", category: "weapon", description: "Espada de Kraken.", price: 0.00, icon: "fa-fish", stock: 0 },
+            { id: 212, name: "Kraken Katana", category: "weapon", description: "Katana de Kraken.", price: 0.00, icon: "fa-sword", stock: 0 },
+            { id: 213, name: "Musashi's Crimson Katana", category: "weapon", description: "Katana carmesim.", price: 0.00, icon: "fa-sword", stock: 0 },
+            { id: 214, name: "Musashi's Rose Katana", category: "weapon", description: "Katana rosa.", price: 0.00, icon: "fa-sword", stock: 0 },
+            { id: 215, name: "Neptune's Trident", category: "weapon", description: "Tridente do mar.", price: 0.00, icon: "fa-trident", stock: 0 },
+            { id: 216, name: "Nidai Kitetsu", category: "weapon", description: "Espada amaldiçoada.", price: 0.00, icon: "fa-sword", stock: 0 },
+            { id: 217, name: "Soul Cane", category: "weapon", description: "Bengala de almas.", price: 0.00, icon: "fa-cane", stock: 0 },
+            { id: 218, name: "Vrael's Pipe", category: "weapon", description: "Cachimbo mágico.", price: 0.00, icon: "fa-smoking", stock: 0 },
+            { id: 219, name: "Boneshiver", category: "weapon", description: "Espada de ossos.", price: 0.00, icon: "fa-bone", stock: 0 },
+            { id: 220, name: "World Ender", category: "weapon", description: "Espada lendária.", price: 0.00, icon: "fa-globe-americas", stock: 0 },
+            { id: 221, name: "Crimson Fang Katana", category: "weapon", description: "Katana com fenda.", price: 0.00, icon: "fa-sword", stock: 0 },
+            { id: 301, name: "Pistol", category: "ranged", description: "Pistola básica.", price: 0.00, icon: "fa-gun", stock: 0 },
+            { id: 302, name: "Rifle", category: "ranged", description: "Rifle de precisão.", price: 0.00, icon: "fa-crosshairs", stock: 0 },
+            { id: 303, name: "Bazooka", category: "ranged", description: "Lança-foguetes.", price: 0.00, icon: "fa-rocket", stock: 0 },
+            { id: 304, name: "Burning Rifle", category: "ranged", description: "Rifle incendiário.", price: 0.00, icon: "fa-fire", stock: 0 },
+            { id: 305, name: "Stark Gun", category: "ranged", description: "Arma de alta tecnologia.", price: 0.00, icon: "fa-atom", stock: 0 },
+            { id: 306, name: "Inferno Rocket Blade", category: "ranged", description: "Lâmina foguete.", price: 0.00, icon: "fa-fire-alt", stock: 0 },
+            { id: 307, name: "Prestige Inferno Rocket", category: "ranged", description: "Versão prestígio.", price: 0.00, icon: "fa-crown", stock: 0 },
+            { id: 308, name: "Prestige Firework", category: "ranged", description: "Lançador prestígio.", price: 0.00, icon: "fa-fireworks", stock: 0 },
+            { id: 309, name: "Firework Launcher", category: "ranged", description: "Lançador de fogos.", price: 0.00, icon: "fa-fire", stock: 0 },
+            { id: 310, name: "Iceborn Gunblade", category: "ranged", description: "Espada-arma de gelo.", price: 0.00, icon: "fa-snowflake", stock: 0 },
+            { id: 401, name: "Anniversary Firework", category: "item", description: "Fogo de aniversário.", price: 0.00, icon: "fa-birthday-cake", stock: 0 },
+            { id: 402, name: "Artifacts", category: "item", description: "Artefatos antigos.", price: 0.00, icon: "fa-history", stock: 0 },
+            { id: 403, name: "Ba'als Core", category: "item", description: "Núcleo de Ba'al.", price: 0.00, icon: "fa-gem", stock: 0 },
+            { id: 404, name: "Bomi's Log Pose", category: "item", description: "Bússola especial.", price: 0.00, icon: "fa-compass", stock: 0 },
+            { id: 405, name: "Book of Nitoryu", category: "item", description: "Livro de luta.", price: 0.00, icon: "fa-book", stock: 0 },
+            { id: 406, name: "Book of Spirits", category: "item", description: "Livro de espíritos.", price: 0.00, icon: "fa-book-dead", stock: 0 },
+            { id: 407, name: "Borj's Soul", category: "item", description: "Alma de Borj.", price: 0.00, icon: "fa-ghost", stock: 0 },
+            { id: 408, name: "Bubble", category: "item", description: "Bolha especial.", price: 0.00, icon: "fa-circle", stock: 0 },
+            { id: 409, name: "Carrot", category: "item", description: "Cenoura especial.", price: 0.00, icon: "fa-carrot", stock: 0 },
+            { id: 410, name: "Custom grips", category: "item", description: "Cabos personalizados.", price: 0.00, icon: "fa-grip-horizontal", stock: 0 },
+            { id: 501, name: "All Seeing Eye", category: "accessory", description: "Olho que tudo vê.", price: 0.00, icon: "fa-eye", stock: 0 },
+            { id: 502, name: "True Ba'al's Guard", category: "accessory", description: "Guarda de Ba'al.", price: 0.00, icon: "fa-shield-alt", stock: 0 },
+            { id: 503, name: "True Ba'al's Snake Head", category: "accessory", description: "Cabeça de serpente.", price: 0.00, icon: "fa-staff-snake", stock: 0 },
+            { id: 504, name: "Soul King's Scarf", category: "accessory", description: "Cachecol do Rei.", price: 0.00, icon: "fa-scarf", stock: 0 },
+            { id: 505, name: "Exalted Cupid Queen's Wings", category: "accessory", description: "Asas da Rainha.", price: 0.00, icon: "fa-dove", stock: 0 },
+            { id: 506, name: "Bat Swarm", category: "accessory", description: "Enxame de morcegos.", price: 0.00, icon: "fa-bat", stock: 0 },
+            { id: 507, name: "Tomoe Drums", category: "accessory", description: "Tambores Tomoe.", price: 0.00, icon: "fa-drum", stock: 0 },
+            { id: 508, name: "Head of Ba'al", category: "accessory", description: "Cabeça de Ba'al.", price: 0.00, icon: "fa-crown", stock: 0 },
+            { id: 601, name: "Platinum Coat", category: "outfit", description: "Casaco de platina.", price: 0.00, icon: "fa-user-tie", stock: 0 },
+            { id: 602, name: "Akatsuki Fit", category: "outfit", description: "Roupa da Akatsuki.", price: 0.00, icon: "fa-cloud", stock: 0 },
+            { id: 603, name: "Demon Corps Outfit", category: "outfit", description: "Uniforme de demônios.", price: 0.00, icon: "fa-user-ninja", stock: 0 },
+            { id: 604, name: "Black Bulls Outfit", category: "outfit", description: "Uniforme Touros Negros.", price: 0.00, icon: "fa-user", stock: 0 },
+            { id: 605, name: "Roger Outfit", category: "outfit", description: "Roupa do Rei Pirata.", price: 0.00, icon: "fa-crown", stock: 0 },
+            { id: 606, name: "Mihawk Outfit", category: "outfit", description: "Roupa de Mihawk.", price: 0.00, icon: "fa-user", stock: 0 },
+            { id: 607, name: "Titan of Justice", category: "outfit", description: "Roupa da Justiça.", price: 0.00, icon: "fa-gavel", stock: 0 },
+            { id: 608, name: "Zorana's Robe", category: "outfit", description: "Manto de Zorana.", price: 0.00, icon: "fa-robe", stock: 0 },
+            { id: 609, name: "Baal Fit", category: "outfit", description: "Roupa de Ba'al.", price: 0.00, icon: "fa-skull", stock: 0 }
+        ];
+
+        let cart = [];
+        let currentCategory = 'all';
+        let isAdmin = false;
+        let isLoggedIn = false;
+        let currentUser = null;
+        
+        // SENHAS DOS ADMINISTRADORES
+        const adminCredentials = {
+            "felipe.teixeira290401@gmail.com": "Cardoso33.",
+            "joao2660908@gmail.com": "joaojmrs"
+        };
+
+        let users = [];
+
+        // Elementos DOM principais
+        const productsContainer = document.getElementById('products-container');
+        const cartCount = document.getElementById('cart-count');
+        const cartIcon = document.getElementById('cart-icon');
+        const cartModal = document.getElementById('cart-modal');
+        const closeCart = document.getElementById('close-cart');
+        const cartItems = document.getElementById('cart-items');
+        const cartTotal = document.getElementById('cart-total');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        const clearCartBtn = document.getElementById('clear-cart');
+        const categoryBtns = document.querySelectorAll('.category-btn');
+        const checkoutForm = document.getElementById('checkout-form');
+        const cancelCheckout = document.getElementById('cancel-checkout');
+        const paymentForm = document.getElementById('payment-form');
+        const reviewModal = document.getElementById('review-modal');
+        const ratingStars = document.querySelectorAll('#rating-stars i');
+        const submitReview = document.getElementById('submit-review');
+        const skipReview = document.getElementById('skip-review');
+        const exploreBtn = document.getElementById('explore-btn');
+        const loginIcon = document.getElementById('login-icon');
+        const adminBadge = document.getElementById('admin-badge');
+        const loginModal = document.getElementById('login-modal');
+        const adminPanel = document.getElementById('admin-panel');
+        const closeLogin = document.getElementById('close-login');
+        const logoutAdmin = document.getElementById('logout-admin');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const loginTabBtn = document.getElementById('login-tab-btn');
+        const registerTabBtn = document.getElementById('register-tab-btn');
+        const loginEmailInput = document.getElementById('login-email');
+        const loginPasswordInput = document.getElementById('login-password');
+        const registerNameInput = document.getElementById('register-name');
+        const registerPhoneInput = document.getElementById('register-phone');
+        const registerEmailInput = document.getElementById('register-email');
+        const registerPasswordInput = document.getElementById('register-password');
+        const registerConfirmPasswordInput = document.getElementById('register-confirm-password');
+        const loginSubmitBtn = document.getElementById('login-submit-btn');
+        const registerSubmitBtn = document.getElementById('register-submit-btn');
+        const cancelRegister = document.getElementById('cancel-register');
+        const adminTabs = document.querySelectorAll('.admin-tab');
+        const inventoryManagement = document.getElementById('inventory-management');
+        const priceManagement = document.getElementById('price-management');
+        const ordersList = document.getElementById('orders-list');
+        const userMenu = document.getElementById('user-menu');
+        const userBtn = document.getElementById('user-btn');
+        const userAvatar = document.getElementById('user-avatar');
+        const userName = document.getElementById('user-name');
+        const userDropdown = document.getElementById('user-dropdown');
+        const dropdownUserName = document.getElementById('dropdown-user-name');
+        const dropdownUserEmail = document.getElementById('dropdown-user-email');
+        const profileBtn = document.getElementById('profile-btn');
+        const ordersBtn = document.getElementById('orders-btn');
+        const logoutBtn = document.getElementById('logout-btn');
+        const profileModal = document.getElementById('profile-modal');
+        const profileAvatar = document.getElementById('profile-avatar');
+        const profileForm = document.getElementById('profile-form');
+        const profileName = document.getElementById('profile-name');
+        const profilePhone = document.getElementById('profile-phone');
+        const profileEmail = document.getElementById('profile-email');
+        const profileCurrentPassword = document.getElementById('profile-current-password');
+        const profileNewPassword = document.getElementById('profile-new-password');
+        const profileConfirmPassword = document.getElementById('profile-confirm-password');
+        const saveProfileBtn = document.getElementById('save-profile-btn');
+        const closeProfile = document.getElementById('close-profile');
+        const searchInput = document.getElementById('search-input');
+
+        // Elementos do Sistema de Novo Item
+        const addNewItemBtn = document.getElementById('add-new-item-btn');
+        const newItemModal = document.getElementById('new-item-modal');
+        const closeNewItemBtn = document.getElementById('close-new-item');
+        const newItemForm = document.getElementById('new-item-form');
+        const newItemName = document.getElementById('new-item-name');
+        const newItemCategory = document.getElementById('new-item-category');
+        const newItemId = document.getElementById('new-item-id');
+        const newItemDescription = document.getElementById('new-item-description');
+        const newItemPrice = document.getElementById('new-item-price');
+        const newItemStock = document.getElementById('new-item-stock');
+        const newItemIcon = document.getElementById('new-item-icon');
+        const saveNewItemBtn = document.getElementById('save-new-item-btn');
+        const cancelNewItemBtn = document.getElementById('cancel-new-item');
+
+        // Elementos do Sistema de Suporte
+        const howToBuyModal = document.getElementById('how-to-buy-modal');
+        const refundModal = document.getElementById('refund-modal');
+        const contactModal = document.getElementById('contact-modal');
+        const faqModal = document.getElementById('faq-modal');
+        const closeHowToBuy = document.getElementById('close-how-to-buy');
+        const closeRefund = document.getElementById('close-refund');
+        const closeContact = document.getElementById('close-contact');
+        const closeFaq = document.getElementById('close-faq');
+        const closeHowToBuyBtn = document.getElementById('close-how-to-buy-btn');
+        const closeRefundBtn = document.getElementById('close-refund-btn');
+        const closeContactBtn = document.getElementById('close-contact-btn');
+        const closeFaqBtn = document.getElementById('close-faq-btn');
+        const refundOptions = document.querySelectorAll('.refund-option');
+        const refundInstructions = document.getElementById('refund-instructions');
+        const refundDetails = document.getElementById('refund-details');
+        const whatsappLink = document.getElementById('whatsapp-link');
+        const supportLinks = document.querySelectorAll('.support-link');
+
+        // Elementos do Modal de Confirmação de Pedido
+        const orderConfirmationModal = document.getElementById('order-confirmation-modal');
+        const closeOrderConfirmation = document.getElementById('close-order-confirmation');
+        const confirmationOrderId = document.getElementById('confirmation-order-id');
+        const confirmationTotal = document.getElementById('confirmation-total');
+        const confirmationItemsList = document.getElementById('confirmation-items-list');
+        const orderIdCopy = document.getElementById('order-id-copy');
+        const goToDiscordBtn = document.getElementById('go-to-discord-btn');
+        const closeConfirmationBtn = document.getElementById('close-confirmation-btn');
+
+        // Dados de instruções de reembolso
+        const refundReasons = {
+            'arrependimento': {
+                title: 'Me arrependi da compra',
+                instructions: 'Para reembolso por arrependimento, siga estes passos:',
+                steps: [
+                    'Entre em contato via WhatsApp com o número abaixo',
+                    'Informe o número do seu pedido',
+                    'O item não pode ter sido utilizado no jogo',
+                    'O reembolso será processado em até 5 dias úteis'
+                ],
+                whatsapp: true
+            },
+            'produto-errado': {
+                title: 'Comprei o produto errado',
+                instructions: 'Para trocar por outro produto, siga estes passos:',
+                steps: [
+                    'Entre em contato via WhatsApp com o número abaixo',
+                    'Informe qual produto comprou e qual deseja trocar',
+                    'A diferença de valor será ajustada',
+                    'A troca será processada em até 24 horas'
+                ],
+                whatsapp: true
+            },
+            'nao-recebido': {
+                title: 'Não recebi o produto',
+                instructions: 'Para resolver problemas de entrega, siga estes passos:',
+                steps: [
+                    'Entre em contato URGENTE via WhatsApp',
+                    'Tenha em mãos o comprovante de pagamento',
+                    'Nosso suporte verificará o status da entrega',
+                    'Caso confirmado o não recebimento, faremos a entrega imediata ou reembolso'
+                ],
+                whatsapp: true
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+            
+            const savedCart = localStorage.getItem('gpoCart');
+            if (savedCart) {
+                cart = JSON.parse(savedCart);
+                updateCartCount();
+            }
+            
+            const savedProducts = localStorage.getItem('gpoProducts');
+            if (savedProducts) {
+                const parsedProducts = JSON.parse(savedProducts);
+                
+                parsedProducts.forEach(savedProduct => {
+                    const index = products.findIndex(p => p.id === savedProduct.id);
+                    if (index !== -1) {
+                        if (savedProduct.stock !== undefined) {
+                            products[index].stock = savedProduct.stock;
+                        }
+                        if (savedProduct.price !== undefined) {
+                            products[index].price = savedProduct.price;
+                        }
+                        if (savedProduct.oldPrice) {
+                            products[index].oldPrice = savedProduct.oldPrice;
+                        }
+                    } else {
+                        products.push(savedProduct);
+                    }
+                });
+                
+                displayProducts();
+            } else {
+                displayProducts();
+            }
+            
+            const savedUsers = localStorage.getItem('gpoUsers');
+            if (savedUsers) {
+                users = JSON.parse(savedUsers);
+            }
+            
+            const adminStatus = localStorage.getItem('gpoAdminLoggedIn');
+            const userStatus = localStorage.getItem('gpoUserLoggedIn');
+            const savedUser = localStorage.getItem('gpoCurrentUser');
+            
+            if (adminStatus === 'true') {
+                isAdmin = true;
+                isLoggedIn = true;
+                adminBadge.style.display = 'block';
+                adminPanel.style.display = 'block';
+                userMenu.style.display = 'none';
+                loginIcon.style.display = 'none';
+                
+                currentUser = JSON.parse(savedUser);
+                updateUserInterface();
+            } else if (userStatus === 'true' && savedUser) {
+                isLoggedIn = true;
+                currentUser = JSON.parse(savedUser);
+                adminBadge.style.display = 'none';
+                adminPanel.style.display = 'none';
+                userMenu.style.display = 'flex';
+                loginIcon.style.display = 'none';
+                
+                updateUserInterface();
+            } else {
+                userMenu.style.display = 'none';
+                loginIcon.style.display = 'block';
+            }
+            
+            const recentPurchase = localStorage.getItem('recentPurchase');
+            if (recentPurchase && !localStorage.getItem('hasRated')) {
+                setTimeout(() => {
+                    reviewModal.style.display = 'flex';
+                }, 2000);
+            }
+            
+            loadOrders();
+            
+            setupNewItemSystem();
+            
+            setupSupportSystem();
+            
+            setupOrderConfirmationModal();
+        });
+
+        function setupNewItemSystem() {
+            addNewItemBtn.addEventListener('click', function() {
+                newItemModal.style.display = 'flex';
+                newItemForm.reset();
+                newItemPrice.value = "0.00";
+                newItemStock.value = "0";
+                newItemIcon.value = "fa-box";
+            });
+
+            closeNewItemBtn.addEventListener('click', () => {
+                newItemModal.style.display = 'none';
+                newItemForm.reset();
+            });
+
+            cancelNewItemBtn.addEventListener('click', () => {
+                newItemModal.style.display = 'none';
+                newItemForm.reset();
+            });
+
+            newItemForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const name = newItemName.value.trim();
+                const category = newItemCategory.value;
+                const id = parseInt(newItemId.value);
+                const description = newItemDescription.value.trim();
+                const price = parseFloat(newItemPrice.value);
+                const stock = parseInt(newItemStock.value);
+                const icon = newItemIcon.value.trim() || 'fa-box';
+                
+                if (!name || !category || !id) {
+                    alert('Por favor, preencha todos os campos obrigatórios.');
+                    return;
+                }
+                
+                if (id < 1) {
+                    alert('O ID do item deve ser um número positivo.');
+                    return;
+                }
+                
+                const existingProduct = products.find(p => p.id === id);
+                if (existingProduct) {
+                    alert(`Já existe um item com o ID ${id}. Por favor, use um ID diferente.`);
+                    return;
+                }
+                
+                if (price < 0) {
+                    alert('O preço não pode ser negativo.');
+                    return;
+                }
+                
+                if (stock < 0) {
+                    alert('O estoque não pode ser negativo.');
+                    return;
+                }
+                
+                const newProduct = {
+                    id: id,
+                    name: name,
+                    category: category,
+                    description: description || `${name} do Grand Piece Online`,
+                    price: price,
+                    icon: icon,
+                    stock: stock
+                };
+                
+                products.push(newProduct);
+                
+                saveProductsToLocalStorage();
+                
+                displayProducts();
+                
+                if (isAdmin) {
+                    loadInventoryManagement();
+                    loadPriceManagement();
+                }
+                
+                newItemModal.style.display = 'none';
+                newItemForm.reset();
+                
+                alert(`Item "${name}" adicionado com sucesso!\n\nID: ${id}\nCategoria: ${category}\nPreço: $${price.toFixed(2)}\nEstoque: ${stock}`);
+                
+                if (currentCategory === 'all' || currentCategory === category) {
+                    setTimeout(() => {
+                        const productElement = document.querySelector(`.add-to-cart[data-id="${id}"]`);
+                        if (productElement) {
+                            productElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                            productElement.style.backgroundColor = "#27ae60";
+                            productElement.style.color = "white";
+                            productElement.textContent = "✓ Novo!";
+                            
+                            setTimeout(() => {
+                                productElement.style.backgroundColor = "";
+                                productElement.style.color = "";
+                                productElement.textContent = stock === 0 ? 'Esgotado' : 'Adicionar';
+                            }, 2000);
+                        }
+                    }, 500);
+                }
+            });
+        }
+
+        function updateUserInterface() {
+            if (!currentUser) return;
+            
+            const firstLetter = currentUser.name.charAt(0).toUpperCase();
+            userAvatar.textContent = firstLetter;
+            userName.textContent = currentUser.name;
+            dropdownUserName.textContent = currentUser.name;
+            dropdownUserEmail.textContent = currentUser.email;
+            profileAvatar.textContent = firstLetter;
+            profileName.value = currentUser.name;
+            profilePhone.value = currentUser.phone || '';
+            profileEmail.value = currentUser.email;
+        }
+
+        function displayProducts() {
+            productsContainer.innerHTML = '';
+            
+            let filteredProducts = currentCategory === 'all' 
+                ? products 
+                : products.filter(product => product.category === currentCategory);
+            
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            if (searchTerm) {
+                filteredProducts = filteredProducts.filter(product => 
+                    product.name.toLowerCase().includes(searchTerm) || 
+                    product.description.toLowerCase().includes(searchTerm) ||
+                    product.category.toLowerCase().includes(searchTerm)
+                );
+            }
+            
+            filteredProducts.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                
+                const categoryText = product.category === 'fruit' ? 'Fruta' : 
+                                   product.category === 'weapon' ? 'Arma' : 
+                                   product.category === 'ranged' ? 'Longo Alcance' :
+                                   product.category === 'accessory' ? 'Acessório' :
+                                   product.category === 'outfit' ? 'Outfit' : 'Item';
+                
+                const stockClass = product.stock <= 3 ? 'stock-badge low-stock' : 'stock-badge';
+                const stockText = product.stock > 0 ? `${product.stock}` : 'ESG';
+                
+                productCard.innerHTML = `
+                    <div class="product-image">
+                        <i class="fas ${product.icon}"></i>
+                        <div class="${stockClass}">${stockText}</div>
+                    </div>
+                    <div class="product-info">
+                        <span class="product-category">${categoryText}</span>
+                        <h3 class="product-name truncate">${product.name}</h3>
+                        <p class="product-description truncate">${product.description}</p>
+                        <div class="product-price">
+                            $${product.price.toFixed(2)}
+                            ${product.oldPrice ? `<span class="small-text">$${product.oldPrice.toFixed(2)}</span>` : ''}
+                        </div>
+                        <div class="product-actions">
+                            <button class="btn add-to-cart" data-id="${product.id}" ${product.stock === 0 ? 'disabled style="background-color: #ccc; font-size: 0.8rem;"' : 'style="font-size: 0.8rem;"'}>
+                                ${product.stock === 0 ? 'Esgotado' : 'Adicionar'}
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                productsContainer.appendChild(productCard);
+            });
+            
+            document.querySelectorAll('.add-to-cart').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    addToCart(productId);
+                });
+            });
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            
+            if (product.stock === 0) {
+                alert('Este item está esgotado!');
+                return;
+            }
+            
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                if (existingItem.quantity >= product.stock) {
+                    alert(`Não há estoque suficiente. Apenas ${product.stock} unidades disponíveis.`);
+                    return;
+                }
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    ...product,
+                    quantity: 1
+                });
+            }
+            
+            updateCartCount();
+            updateCartModal();
+            saveCartToLocalStorage();
+            
+            const button = document.querySelector(`.add-to-cart[data-id="${productId}"]`);
+            const originalText = button.textContent;
+            button.textContent = "✓";
+            button.style.backgroundColor = "#27ae60";
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.style.backgroundColor = "";
+            }, 1500);
+        }
+
+        function updateCartCount() {
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+        }
+
+        function updateCartModal() {
+            cartItems.innerHTML = '';
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p style="text-align: center; color: #777; font-size: 0.9rem;">Seu carrinho está vazio.</p>';
+                cartTotal.textContent = '0.00';
+                return;
+            }
+            
+            let total = 0;
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                
+                const cartItem = document.createElement('div');
+                cartItem.className = 'cart-item';
+                cartItem.innerHTML = `
+                    <div class="cart-item-details">
+                        <h4 class="truncate">${item.name}</h4>
+                        <p class="cart-item-price small-text">$${item.price.toFixed(2)} cada</p>
+                        <small class="small-text">Estoque: ${item.stock}</small>
+                    </div>
+                    <div class="cart-item-quantity">
+                        <button class="quantity-btn decrease-quantity" data-id="${item.id}">-</button>
+                        <span class="small-text">${item.quantity}</span>
+                        <button class="quantity-btn increase-quantity" data-id="${item.id}">+</button>
+                    </div>
+                    <div>
+                        <strong class="small-text">$${itemTotal.toFixed(2)}</strong>
+                    </div>
+                `;
+                
+                cartItems.appendChild(cartItem);
+            });
+            
+            cartTotal.textContent = total.toFixed(2);
+            
+            document.querySelectorAll('.decrease-quantity').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    updateQuantity(productId, -1);
+                });
+            });
+            
+            document.querySelectorAll('.increase-quantity').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    updateQuantity(productId, 1);
+                });
+            });
+        }
+
+        function updateQuantity(productId, change) {
+            const itemIndex = cart.findIndex(item => item.id === productId);
+            
+            if (itemIndex !== -1) {
+                const product = products.find(p => p.id === productId);
+                
+                if (change > 0 && cart[itemIndex].quantity >= product.stock) {
+                    alert(`Não há estoque suficiente. Apenas ${product.stock} unidades disponíveis.`);
+                    return;
+                }
+                
+                cart[itemIndex].quantity += change;
+                
+                if (cart[itemIndex].quantity <= 0) {
+                    cart.splice(itemIndex, 1);
+                }
+                
+                updateCartCount();
+                updateCartModal();
+                saveCartToLocalStorage();
+            }
+        }
+
+        function saveCartToLocalStorage() {
+            localStorage.setItem('gpoCart', JSON.stringify(cart));
+        }
+
+        function saveProductsToLocalStorage() {
+            localStorage.setItem('gpoProducts', JSON.stringify(products));
+        }
+
+        function saveUsersToLocalStorage() {
+            localStorage.setItem('gpoUsers', JSON.stringify(users));
+        }
+
+        categoryBtns.forEach(button => {
+            button.addEventListener('click', function() {
+                categoryBtns.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                currentCategory = this.getAttribute('data-category');
+                displayProducts();
+            });
+        });
+
+        searchInput.addEventListener('input', function() {
+            displayProducts();
+        });
+
+        cartIcon.addEventListener('click', () => {
+            updateCartModal();
+            cartModal.style.display = 'flex';
+        });
+
+        closeCart.addEventListener('click', () => {
+            cartModal.style.display = 'none';
+        });
+
+        userBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            userDropdown.classList.toggle('show');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!userBtn.contains(e.target) && !userDropdown.contains(e.target)) {
+                userDropdown.classList.remove('show');
+            }
+        });
+
+        profileBtn.addEventListener('click', () => {
+            userDropdown.classList.remove('show');
+            profileModal.style.display = 'flex';
+        });
+
+        closeProfile.addEventListener('click', () => {
+            profileModal.style.display = 'none';
+            profileForm.reset();
+        });
+
+        profileForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = profileName.value.trim();
+            const phone = profilePhone.value.trim();
+            const currentPassword = profileCurrentPassword.value.trim();
+            const newPassword = profileNewPassword.value.trim();
+            const confirmPassword = profileConfirmPassword.value.trim();
+            
+            if (!name) {
+                alert('O nome é obrigatório.');
+                return;
+            }
+            
+            const userIndex = users.findIndex(u => u.email === currentUser.email);
+            if (userIndex !== -1) {
+                users[userIndex].name = name;
+                users[userIndex].phone = phone;
+                
+                if (currentPassword && newPassword && confirmPassword) {
+                    if (users[userIndex].password !== currentPassword) {
+                        alert('Senha atual incorreta.');
+                        return;
+                    }
+                    
+                    if (newPassword !== confirmPassword) {
+                        alert('As novas senhas não coincidem.');
+                        return;
+                    }
+                    
+                    users[userIndex].password = newPassword;
+                }
+                
+                saveUsersToLocalStorage();
+                
+                currentUser.name = name;
+                currentUser.phone = phone;
+                localStorage.setItem('gpoCurrentUser', JSON.stringify(currentUser));
+                
+                updateUserInterface();
+                
+                profileModal.style.display = 'none';
+                profileForm.reset();
+                
+                alert('Perfil atualizado com sucesso!');
+            }
+        });
+
+        logoutBtn.addEventListener('click', () => {
+            if (confirm('Tem certeza que deseja sair?')) {
+                isLoggedIn = false;
+                currentUser = null;
+                userMenu.style.display = 'none';
+                loginIcon.style.display = 'block';
+                localStorage.removeItem('gpoUserLoggedIn');
+                localStorage.removeItem('gpoCurrentUser');
+                userDropdown.classList.remove('show');
+                
+                alert('Logout realizado com sucesso!');
+            }
+        });
+
+        loginIcon.addEventListener('click', () => {
+            loginForm.reset();
+            registerForm.reset();
+            loginTabBtn.click();
+            loginModal.style.display = 'flex';
+        });
+
+        loginTabBtn.addEventListener('click', () => {
+            loginTabBtn.classList.add('active');
+            registerTabBtn.classList.remove('active');
+            loginForm.classList.add('active');
+            registerForm.classList.remove('active');
+        });
+
+        registerTabBtn.addEventListener('click', () => {
+            registerTabBtn.classList.add('active');
+            loginTabBtn.classList.remove('active');
+            registerForm.classList.add('active');
+            loginForm.classList.remove('active');
+        });
+
+        closeLogin.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+            loginForm.reset();
+            registerForm.reset();
+        });
+
+        cancelRegister.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+            loginForm.reset();
+            registerForm.reset();
+        });
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = loginEmailInput.value.trim();
+            const password = loginPasswordInput.value.trim();
+            
+            if (adminCredentials.hasOwnProperty(email)) {
+                if (password === adminCredentials[email]) {
+                    isAdmin = true;
+                    isLoggedIn = true;
+                    adminBadge.style.display = 'block';
+                    adminPanel.style.display = 'block';
+                    userMenu.style.display = 'none';
+                    loginIcon.style.display = 'none';
+                    loginModal.style.display = 'none';
+                    localStorage.setItem('gpoAdminLoggedIn', 'true');
+                    localStorage.setItem('gpoUserLoggedIn', 'true');
+                    
+                    currentUser = {
+                        name: "Administrador",
+                        email: email,
+                        phone: ""
+                    };
+                    localStorage.setItem('gpoCurrentUser', JSON.stringify(currentUser));
+                    
+                    loginForm.reset();
+                    
+                    loadAdminPanel();
+                    
+                    alert('Login como Administrador realizado com sucesso!');
+                } else {
+                    alert('Senha incorreta para este administrador. Por favor, tente novamente.');
+                    loginPasswordInput.value = '';
+                    loginPasswordInput.focus();
+                }
+            } 
+            else {
+                const user = users.find(u => u.email === email && u.password === password);
+                
+                if (user) {
+                    isAdmin = false;
+                    isLoggedIn = true;
+                    adminBadge.style.display = 'none';
+                    adminPanel.style.display = 'none';
+                    userMenu.style.display = 'flex';
+                    loginIcon.style.display = 'none';
+                    loginModal.style.display = 'none';
+                    localStorage.setItem('gpoAdminLoggedIn', 'false');
+                    localStorage.setItem('gpoUserLoggedIn', 'true');
+                    
+                    currentUser = {
+                        name: user.name,
+                        email: user.email,
+                        phone: user.phone
+                    };
+                    localStorage.setItem('gpoCurrentUser', JSON.stringify(currentUser));
+                    
+                    loginForm.reset();
+                    
+                    updateUserInterface();
+                    
+                    alert(`Bem-vindo de volta, ${user.name}!`);
+                } else {
+                    alert('E-mail ou senha incorretos. Tente novamente.');
+                    loginPasswordInput.value = '';
+                    loginPasswordInput.focus();
+                }
+            }
+        });
+
+        registerForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = registerNameInput.value.trim();
+            const phone = registerPhoneInput.value.trim();
+            const email = registerEmailInput.value.trim();
+            const password = registerPasswordInput.value.trim();
+            const confirmPassword = registerConfirmPasswordInput.value.trim();
+            
+            if (!name || !phone || !email || !password || !confirmPassword) {
+                alert('Por favor, preencha todos os campos.');
+                return;
+            }
+            
+            if (password !== confirmPassword) {
+                alert('As senhas não coincidem. Tente novamente.');
+                return;
+            }
+            
+            if (password.length < 6) {
+                alert('A senha deve ter pelo menos 6 caracteres.');
+                return;
+            }
+            
+            if (adminCredentials.hasOwnProperty(email)) {
+                alert('Este email já está registrado como administrador. Use a senha específica para fazer login.');
+                return;
+            }
+            
+            const existingUser = users.find(u => u.email === email);
+            if (existingUser) {
+                alert('Este e-mail já está cadastrado. Tente fazer login.');
+                return;
+            }
+            
+            const newUser = {
+                id: Date.now(),
+                name: name,
+                phone: phone,
+                email: email,
+                password: password,
+                createdAt: new Date().toISOString()
+            };
+            
+            users.push(newUser);
+            saveUsersToLocalStorage();
+            
+            isAdmin = false;
+            isLoggedIn = true;
+            adminBadge.style.display = 'none';
+            adminPanel.style.display = 'none';
+            userMenu.style.display = 'flex';
+            loginIcon.style.display = 'none';
+            loginModal.style.display = 'none';
+            localStorage.setItem('gpoAdminLoggedIn', 'false');
+            localStorage.setItem('gpoUserLoggedIn', 'true');
+            
+            currentUser = {
+                name: newUser.name,
+                email: newUser.email,
+                phone: newUser.phone
+            };
+            localStorage.setItem('gpoCurrentUser', JSON.stringify(currentUser));
+            
+            registerForm.reset();
+            
+            updateUserInterface();
+            
+            alert(`Conta criada com sucesso! Bem-vindo, ${name}!`);
+        });
+
+        logoutAdmin.addEventListener('click', () => {
+            isAdmin = false;
+            isLoggedIn = false;
+            adminBadge.style.display = 'none';
+            adminPanel.style.display = 'none';
+            userMenu.style.display = 'none';
+            loginIcon.style.display = 'block';
+            localStorage.removeItem('gpoAdminLoggedIn');
+            localStorage.removeItem('gpoUserLoggedIn');
+            localStorage.removeItem('gpoCurrentUser');
+            
+            alert('Logout realizado com sucesso!');
+        });
+
+        adminTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                adminTabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                const tabId = this.getAttribute('data-tab');
+                document.querySelectorAll('.admin-tab-content').forEach(content => {
+                    content.style.display = 'none';
+                });
+                
+                document.getElementById(`${tabId}-tab`).style.display = 'block';
+                
+                if (tabId === 'orders') {
+                    loadOrders();
+                } else if (tabId === 'prices') {
+                    loadPriceManagement();
+                } else if (tabId === 'inventory') {
+                    loadInventoryManagement();
+                }
+            });
+        });
+
+        function loadAdminPanel() {
+            loadInventoryManagement();
+            loadPriceManagement();
+        }
+
+        function loadInventoryManagement() {
+            inventoryManagement.innerHTML = '';
+            
+            const categories = ['fruit', 'weapon', 'ranged', 'item', 'accessory', 'outfit'];
+            const categoryNames = {
+                'fruit': 'Frutas',
+                'weapon': 'Armas',
+                'ranged': 'Longo Alcance',
+                'item': 'Itens',
+                'accessory': 'Acessórios',
+                'outfit': 'Outfits'
+            };
+            
+            categories.forEach(category => {
+                const categoryProducts = products.filter(p => p.category === category);
+                
+                if (categoryProducts.length > 0) {
+                    const categoryDiv = document.createElement('div');
+                    categoryDiv.className = 'inventory-category';
+                    categoryDiv.innerHTML = `<h4 class="small-text">${categoryNames[category]}</h4>`;
+                    
+                    categoryProducts.forEach(product => {
+                        const itemDiv = document.createElement('div');
+                        itemDiv.className = 'inventory-item';
+                        itemDiv.innerHTML = `
+                            <div class="inventory-header">
+                                <div>
+                                    <strong class="small-text truncate">${product.name}</strong>
+                                    <p class="small-text compact">
+                                        Estoque: <strong>${product.stock}</strong> | Preço: $${product.price.toFixed(2)}
+                                    </p>
+                                </div>
+                                <div class="stock-controls">
+                                    <button class="stock-btn remove" data-id="${product.id}">-</button>
+                                    <span class="small-text">${product.stock}</span>
+                                    <button class="stock-btn add" data-id="${product.id}">+</button>
+                                </div>
+                            </div>
+                            <div class="small-text compact">
+                                ID: ${product.id} | Cat: ${categoryNames[category]}
+                            </div>
+                        `;
+                        
+                        categoryDiv.appendChild(itemDiv);
+                    });
+                    
+                    inventoryManagement.appendChild(categoryDiv);
+                }
+            });
+            
+            document.querySelectorAll('.stock-btn.add').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    updateStock(productId, 1);
+                });
+            });
+            
+            document.querySelectorAll('.stock-btn.remove').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    updateStock(productId, -1);
+                });
+            });
+        }
+
+        function loadPriceManagement() {
+            priceManagement.innerHTML = '';
+            
+            const categories = ['fruit', 'weapon', 'ranged', 'item', 'accessory', 'outfit'];
+            const categoryNames = {
+                'fruit': 'Frutas',
+                'weapon': 'Armas',
+                'ranged': 'Longo Alcance',
+                'item': 'Itens',
+                'accessory': 'Acessórios',
+                'outfit': 'Outfits'
+            };
+            
+            categories.forEach(category => {
+                const categoryProducts = products.filter(p => p.category === category);
+                
+                if (categoryProducts.length > 0) {
+                    const categoryDiv = document.createElement('div');
+                    categoryDiv.className = 'inventory-category';
+                    categoryDiv.innerHTML = `<h4 class="small-text">${categoryNames[category]}</h4>`;
+                    
+                    categoryProducts.forEach(product => {
+                        const itemDiv = document.createElement('div');
+                        itemDiv.className = 'inventory-item';
+                        itemDiv.innerHTML = `
+                            <div class="inventory-header">
+                                <div>
+                                    <strong class="small-text truncate">${product.name}</strong>
+                                    <p class="small-text compact">
+                                        Est: ${product.stock} | Preço: $${product.price.toFixed(2)}
+                                    </p>
+                                </div>
+                                <div>
+                                    <div class="price-controls">
+                                        <button class="price-btn down" data-id="${product.id}">-$5</button>
+                                        <input type="number" class="price-input small-text" data-id="${product.id}" value="${product.price.toFixed(2)}" step="0.01" min="0">
+                                        <button class="price-btn up" data-id="${product.id}">+$5</button>
+                                    </div>
+                                    <button class="btn small-text" style="margin-top: 0.3rem; width: 100%; padding: 0.3rem;" data-id="${product.id}" id="update-price-${product.id}">Atualizar</button>
+                                </div>
+                            </div>
+                        `;
+                        
+                        categoryDiv.appendChild(itemDiv);
+                    });
+                    
+                    priceManagement.appendChild(categoryDiv);
+                }
+            });
+            
+            document.querySelectorAll('.price-btn.up').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    updatePrice(productId, 5);
+                });
+            });
+            
+            document.querySelectorAll('.price-btn.down').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    updatePrice(productId, -5);
+                });
+            });
+            
+            document.querySelectorAll('.price-input').forEach(input => {
+                input.addEventListener('change', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    const newPrice = parseFloat(this.value);
+                    
+                    if (!isNaN(newPrice) && newPrice >= 0) {
+                        updatePrice(productId, 0, newPrice);
+                    }
+                });
+            });
+            
+            document.querySelectorAll('[id^="update-price-"]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const productId = parseInt(this.getAttribute('data-id'));
+                    const input = document.querySelector(`.price-input[data-id="${productId}"]`);
+                    const newPrice = parseFloat(input.value);
+                    
+                    if (!isNaN(newPrice) && newPrice >= 0) {
+                        updatePrice(productId, 0, newPrice);
+                    }
+                });
+            });
+        }
+
+        function updateStock(productId, change) {
+            const productIndex = products.findIndex(p => p.id === productId);
+            
+            if (productIndex !== -1) {
+                products[productIndex].stock += change;
+                
+                if (products[productIndex].stock < 0) {
+                    products[productIndex].stock = 0;
+                }
+                
+                displayProducts();
+                loadInventoryManagement();
+                loadPriceManagement();
+                saveProductsToLocalStorage();
+                
+                cart.forEach((item, index) => {
+                    if (item.id === productId && item.quantity > products[productIndex].stock) {
+                        alert(`O estoque de ${item.name} foi reduzido. Ajustando quantidade no carrinho.`);
+                        item.quantity = products[productIndex].stock;
+                        
+                        if (item.quantity === 0) {
+                            cart.splice(index, 1);
+                        }
+                        
+                        updateCartCount();
+                        updateCartModal();
+                        saveCartToLocalStorage();
+                    }
+                });
+            }
+        }
+
+        function updatePrice(productId, change, specificPrice = null) {
+            const productIndex = products.findIndex(p => p.id === productId);
+            
+            if (productIndex !== -1) {
+                if (specificPrice !== null) {
+                    products[productIndex].price = specificPrice;
+                } else {
+                    products[productIndex].price += change;
+                    
+                    if (products[productIndex].price < 0) {
+                        products[productIndex].price = 0;
+                    }
+                }
+                
+                displayProducts();
+                loadInventoryManagement();
+                loadPriceManagement();
+                saveProductsToLocalStorage();
+                
+                cart.forEach(item => {
+                    if (item.id === productId) {
+                        item.price = products[productIndex].price;
+                    }
+                });
+                
+                updateCartModal();
+                saveCartToLocalStorage();
+                
+                alert(`Preço de ${products[productIndex].name} atualizado para $${products[productIndex].price.toFixed(2)}`);
+            }
+        }
+
+        function loadOrders() {
+            const savedOrders = localStorage.getItem('gpoOrders');
+            ordersList.innerHTML = '';
+            
+            if (savedOrders) {
+                const orders = JSON.parse(savedOrders);
+                
+                if (orders.length > 0) {
+                    orders.forEach(order => {
+                        const orderDiv = document.createElement('div');
+                        orderDiv.className = 'inventory-item';
+                        orderDiv.style.marginBottom = '0.8rem';
+                        
+                        let itemsText = '';
+                        order.items.forEach(item => {
+                            itemsText += `${item.name} x${item.quantity} - $${(item.price * item.quantity).toFixed(2)}\n`;
+                        });
+                        
+                        orderDiv.innerHTML = `
+                            <div class="inventory-header">
+                                <div>
+                                    <strong class="small-text">Pedido #${order.id}</strong>
+                                    <p class="small-text compact">
+                                        Cliente: ${order.customerName} (${order.customerEmail})
+                                    </p>
+                                </div>
+                                <div>
+                                    <strong class="small-text">$${order.total.toFixed(2)}</strong>
+                                </div>
+                            </div>
+                            <div class="small-text compact">
+                                <strong>Itens:</strong>
+                                <pre style="background: #f5f5f5; padding: 0.3rem; border-radius: 3px; font-size: 0.75rem; margin-top: 0.3rem;">${itemsText}</pre>
+                            </div>
+                            <div class="small-text compact">
+                                ${new Date(order.date).toLocaleString()} - 
+                                <span style="color: ${order.status === 'pendente' ? '#e74c3c' : order.status === 'processando' ? '#f39c12' : '#27ae60'};">
+                                    ${order.status}
+                                </span>
+                            </div>
+                        `;
+                        
+                        ordersList.appendChild(orderDiv);
+                    });
+                } else {
+                    ordersList.innerHTML = '<p class="small-text">Nenhum pedido recente.</p>';
+                }
+            } else {
+                ordersList.innerHTML = '<p class="small-text">Nenhum pedido recente.</p>';
+            }
+        }
+
+        clearCartBtn.addEventListener('click', () => {
+            cart = [];
+            updateCartCount();
+            updateCartModal();
+            saveCartToLocalStorage();
+        });
+
+        checkoutBtn.addEventListener('click', () => {
+            if (cart.length === 0) {
+                alert('Seu carrinho está vazio!');
+                return;
+            }
+            
+            for (const item of cart) {
+                const product = products.find(p => p.id === item.id);
+                if (item.quantity > product.stock) {
+                    alert(`Não há estoque suficiente de ${item.name}. Apenas ${product.stock} unidades disponíveis.`);
+                    return;
+                }
+            }
+            
+            cartModal.style.display = 'none';
+            checkoutForm.style.display = 'block';
+            window.scrollTo({ top: checkoutForm.offsetTop, behavior: 'smooth' });
+        });
+
+        cancelCheckout.addEventListener('click', () => {
+            checkoutForm.style.display = 'none';
+        });
+
+        function setupSupportSystem() {
+            supportLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const supportType = this.getAttribute('data-support');
+                    
+                    switch(supportType) {
+                        case 'how-to-buy':
+                            howToBuyModal.style.display = 'flex';
+                            break;
+                        case 'refund':
+                            refundModal.style.display = 'flex';
+                            refundOptions.forEach(opt => opt.classList.remove('selected'));
+                            refundInstructions.style.display = 'none';
+                            whatsappLink.style.display = 'none';
+                            break;
+                        case 'contact':
+                            contactModal.style.display = 'flex';
+                            break;
+                        case 'faq':
+                            faqModal.style.display = 'flex';
+                            break;
+                    }
+                });
+            });
+
+            closeHowToBuy.addEventListener('click', () => howToBuyModal.style.display = 'none');
+            closeRefund.addEventListener('click', () => refundModal.style.display = 'none');
+            closeContact.addEventListener('click', () => contactModal.style.display = 'none');
+            closeFaq.addEventListener('click', () => faqModal.style.display = 'none');
+            
+            closeHowToBuyBtn.addEventListener('click', () => howToBuyModal.style.display = 'none');
+            closeRefundBtn.addEventListener('click', () => refundModal.style.display = 'none');
+            closeContactBtn.addEventListener('click', () => contactModal.style.display = 'none');
+            closeFaqBtn.addEventListener('click', () => faqModal.style.display = 'none');
+
+            refundOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    refundOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    
+                    const reason = this.getAttribute('data-reason');
+                    const refundData = refundReasons[reason];
+                    
+                    refundInstructions.style.display = 'block';
+                    
+                    let stepsHTML = '';
+                    refundData.steps.forEach(step => {
+                        stepsHTML += `<p><i class="fas fa-check-circle" style="color: #27ae60; margin-right: 0.5rem;"></i> ${step}</p>`;
+                    });
+                    
+                    refundDetails.innerHTML = `
+                        <h4>${refundData.title}</h4>
+                        <p>${refundData.instructions}</p>
+                        ${stepsHTML}
+                    `;
+                    
+                    if (refundData.whatsapp) {
+                        whatsappLink.style.display = 'flex';
+                        whatsappLink.onclick = () => window.open('https://wa.me/5511971827725', '_blank');
+                    } else {
+                        whatsappLink.style.display = 'none';
+                    }
+                    
+                    refundInstructions.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+            });
+        }
+
+        function setupOrderConfirmationModal() {
+            closeOrderConfirmation.addEventListener('click', () => {
+                orderConfirmationModal.style.display = 'none';
+            });
+            
+            closeConfirmationBtn.addEventListener('click', () => {
+                orderConfirmationModal.style.display = 'none';
+            });
+            
+            goToDiscordBtn.addEventListener('click', () => {
+                const orderId = confirmationOrderId.textContent.replace('Pedido #', '');
+                
+                window.open('https://discord.gg/zNfACXya', '_blank');
+                
+                alert(`✅ Servidor Discord aberto!\n\nPor favor, siga estas instruções:\n\n1. Aguarde nosso bot criar um ticket automaticamente\n2. No ticket, informe o número do seu pedido: ${orderId}\n3. Siga as instruções do nosso staff para pagamento\n4. Após o pagamento, você receberá os itens no jogo!\n\nNosso bot estará aguardando por você no Discord!`);
+                
+                setTimeout(() => {
+                    orderConfirmationModal.style.display = 'none';
+                }, 3000);
+            });
+        }
+
+        function showOrderConfirmation(order) {
+            confirmationOrderId.textContent = `Pedido #${order.id}`;
+            orderIdCopy.textContent = order.id;
+            confirmationTotal.textContent = `$${order.total.toFixed(2)}`;
+            
+            confirmationItemsList.innerHTML = '';
+            order.items.forEach(item => {
+                const itemElement = document.createElement('div');
+                itemElement.className = 'order-item';
+                itemElement.innerHTML = `
+                    <span class="small-text">${item.name} x${item.quantity}</span>
+                    <span class="small-text">$${(item.price * item.quantity).toFixed(2)}</span>
+                `;
+                confirmationItemsList.appendChild(itemElement);
+            });
+            
+            orderConfirmationModal.style.display = 'flex';
+        }
+
+        paymentForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const discord = document.getElementById('discord').value;
+            const gameAccount = document.getElementById('game-account').value;
+            const paymentMethod = document.getElementById('payment-method').value;
+            const notes = document.getElementById('notes').value;
+            
+            if (!name || !email || !discord || !gameAccount || !paymentMethod) {
+                alert('Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+            
+            let total = 0;
+            let orderItems = [];
+            
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                orderItems.push({
+                    id: item.id,
+                    name: item.name,
+                    quantity: item.quantity,
+                    price: item.price
+                });
+            });
+            
+            const orderId = 'GPO-' + Date.now() + '-' + Math.floor(Math.random() * 1000);
+            
+            const order = {
+                id: orderId,
+                customerName: name,
+                customerEmail: email,
+                discord: discord,
+                gameAccount: gameAccount,
+                paymentMethod: paymentMethod,
+                items: orderItems,
+                total: total,
+                status: 'aguardando_pagamento',
+                date: new Date().toISOString(),
+                notes: notes
+            };
+            
+            const savedOrders = localStorage.getItem('gpoOrders');
+            let orders = [];
+            
+            if (savedOrders) {
+                orders = JSON.parse(savedOrders);
+            }
+            
+            orders.unshift(order);
+            localStorage.setItem('gpoOrders', JSON.stringify(orders));
+            
+            cart.forEach(item => {
+                const productIndex = products.findIndex(p => p.id === item.id);
+                if (productIndex !== -1) {
+                    products[productIndex].stock -= item.quantity;
+                }
+            });
+            
+            saveProductsToLocalStorage();
+            
+            cart = [];
+            updateCartCount();
+            saveCartToLocalStorage();
+            
+            showOrderConfirmation(order);
+            
+            checkoutForm.style.display = 'none';
+            checkoutForm.reset();
+            
+            localStorage.setItem('recentPurchase', 'true');
+            localStorage.setItem('lastOrderId', order.id);
+            
+            if (isAdmin) {
+                loadInventoryManagement();
+                loadPriceManagement();
+                loadOrders();
+            }
+            
+            displayProducts();
+        });
+
+        let selectedRating = 0;
+        
+        ratingStars.forEach(star => {
+            star.addEventListener('click', function() {
+                selectedRating = parseInt(this.getAttribute('data-rating'));
+                
+                ratingStars.forEach(s => {
+                    const rating = parseInt(s.getAttribute('data-rating'));
+                    if (rating <= selectedRating) {
+                        s.classList.remove('far');
+                        s.classList.add('fas', 'active');
+                    } else {
+                        s.classList.remove('fas', 'active');
+                        s.classList.add('far');
+                    }
+                });
+            });
+            
+            star.addEventListener('mouseover', function() {
+                const hoverRating = parseInt(this.getAttribute('data-rating'));
+                
+                ratingStars.forEach(s => {
+                    const rating = parseInt(s.getAttribute('data-rating'));
+                    if (rating <= hoverRating) {
+                        s.classList.remove('far');
+                        s.classList.add('fas');
+                    } else {
+                        s.classList.remove('fas');
+                        s.classList.add('far');
+                    }
+                });
+            });
+            
+            star.addEventListener('mouseout', function() {
+                ratingStars.forEach(s => {
+                    const rating = parseInt(s.getAttribute('data-rating'));
+                    if (selectedRating === 0 || rating > selectedRating) {
+                        s.classList.remove('fas');
+                        s.classList.add('far');
+                    }
+                });
+            });
+        });
+
+        submitReview.addEventListener('click', () => {
+            const comment = document.getElementById('review-comment').value;
+            
+            if (selectedRating === 0) {
+                alert('Por favor, selecione uma avaliação com estrelas.');
+                return;
+            }
+            
+            const review = {
+                rating: selectedRating,
+                comment: comment,
+                date: new Date().toISOString(),
+                user: currentUser ? currentUser.name : 'Anônimo'
+            };
+            
+            console.log('Avaliação enviada:', review);
+            
+            reviewModal.style.display = 'none';
+            
+            localStorage.setItem('hasRated', 'true');
+            
+            alert('Obrigado pela sua avaliação! Sua opinião é muito importante para nós.');
+        });
+
+        skipReview.addEventListener('click', () => {
+            reviewModal.style.display = 'none';
+            localStorage.setItem('hasRated', 'true');
+        });
+
+        exploreBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.querySelector('.category-btn[data-category="all"]').click();
+            window.scrollTo({ top: productsContainer.offsetTop, behavior: 'smooth' });
+        });
+    </script>
+</body>
+</html>
